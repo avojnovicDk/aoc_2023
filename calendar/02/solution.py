@@ -52,11 +52,12 @@ def solve_part1(file_path: str) -> int:
 
 
 def solve_part1_regex(file_path: str) -> int:
+    valid_strings = ["Game ", "\:", ";", "\,"]
+    for color, quantity in QUANTITY_PER_COLOR.items():
+        valid_strings += [f" {i + 1} {color}" for i in range(quantity)]
+
     solution = 0
     for line in yield_lines(file_path):
-        valid_strings = ["Game ", "\:", ";", "\,"]
-        for color, quantity in QUANTITY_PER_COLOR.items():
-            valid_strings += [f" {i + 1} {color}" for i in range(quantity)]
         try:
             solution += int(re.sub("|".join(valid_strings), '', line))
         except ValueError:
