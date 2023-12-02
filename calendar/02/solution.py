@@ -1,3 +1,4 @@
+import re
 from collections import namedtuple
 from functools import reduce
 from typing import Generator
@@ -49,7 +50,20 @@ def solve_part1(file_path: str) -> int:
             solution += int(game_number.split()[1])
     return solution
 
-    
+
+def solve_part1_regex(file_path: str) -> int:
+    solution = 0
+    for line in yield_lines(file_path):
+        valid_strings = ["Game ", "\:", ";", "\,"]
+        for color, quantity in QUANTITY_PER_COLOR.items():
+            valid_strings += [f" {i + 1} {color}" for i in range(quantity)]
+        try:
+            solution += int(re.sub("|".join(valid_strings), '', line))
+        except ValueError:
+            pass
+    return solution
+
+
 def solve_part2(file_path: str) -> int:
     solution = 0
     for line in yield_lines(file_path):
@@ -61,3 +75,5 @@ assert solve_part1("example.txt") == 8
 assert solve_part1("input.txt") == 3059
 assert solve_part2("example.txt") == 2286
 assert solve_part2("input.txt") == 65371
+assert solve_part1_regex("example.txt") == 8
+assert solve_part1_regex("input.txt") == 3059
